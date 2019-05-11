@@ -1,3 +1,22 @@
+"""
+Read before use:
+    There are 3 forms to introduce the key where 'o' are free grills and
+    'x' close ones
+        1. All the key in one line, for example oxxxxxxxxoxoxxox
+        2. Specifing the key matrix size and introducing row per 
+            row of the key
+                matrix key size = 4
+                oxxx
+                xxxx
+                xoxo
+                xxox
+        3. Specifing the max index of the row and putting the indixes
+            of the grills that make part of the key. Supposing that the key
+            is a unidimensional array
+                size key = 16
+                key = 0 9 11 14
+"""
+
 import math
 
 GRILLE_KEY = 'o'
@@ -24,6 +43,20 @@ def fillKeyOneLine( key, text ):
             new_row.append( key[i*matrix_size + j] )
         matrix_key.append( new_row )
     return matrix_key
+
+def fillKeyIndexes( indexes, size ):
+    index_i = 0
+    matrix_size = math.ceil( math.sqrt( size ) )
+    matrix = []
+    for i in range( matrix_size ):
+        matrix.append( [] )
+        for j in range( matrix_size ):
+            if index_i < len( indexes ) and int(indexes[index_i]) == i*matrix_size + j:
+                matrix[i].append('o')
+                index_i += 1
+            else:
+                matrix[i].append('x')
+    return matrix
 
 #Crea una matrix cuadrada de tamaño size vacia
 def createMatrix( size ):
@@ -134,6 +167,7 @@ print( "-----key Menu-----" )
 print( "--------------" )
 print( "1. One line." )
 print( "2. Multiple lines." )
+print( "3. Indexes of one line key." )
 print( "--------------" )
 key_option = input( "Select key option: " )
 
@@ -147,6 +181,9 @@ elif key_option == '2':
         key.append([])
         for j in row:
             key[i].append( j )
+elif key_option == '3':
+    size_key = int( input( "Digit the size key: " ) )
+    key = fillKeyIndexes( input( "Digit key: " ).strip().split(" "), size_key )
 
 if option == ENCRYPT:
     solution = encrypt( text, key, option )
@@ -176,6 +213,12 @@ JIM ATTACKS AT DAWN
 1
 oxxxxxxxxoxoxxox
 
+1
+JIM ATTACKS AT DAWN
+3
+16
+0 9 11 14
+
 2
 jktdsaatwiamcnat
 2
@@ -189,6 +232,12 @@ xxox
 jktdsaatwiamcnat
 1
 oxxxxxxxxoxoxxox
+
+2
+jktdsaatwiamcnat
+3
+16
+0 9 11 14
 """
 """
 2
@@ -205,8 +254,14 @@ oxxxxoxxx
 xoxxoxxxo
 xxoxxxxxx
 
+2
+TESHN INCIG LSRGY LRIUS PITSA TLILM REENS ATTOG SIAWG IPVER TOTEH HVAEA XITDT UAIME RANPM TLHIE I
+3
+81
+0 3 5 11 17 19 24 29 31 34 42 44 48 52 54 59 64 67 71 74
+
 1
-thisisame ssagethati amencrypt ingwithat urninggri lletoprov idethisil lustrativ eexample
+thisisame sagethati amencrypt ingwithat urninggri lletoprov idethisil lustrativ eexample
 2
 9
 oxxoxoxxx
@@ -218,4 +273,10 @@ xxxoxxxox
 oxxxxoxxx
 xoxxoxxxo
 xxoxxxxxx
+
+1
+thisisame sagethati amencrypt ingwithat urninggri lletoprov idethisil lustrativ eexample
+3
+81
+0 3 5 11 17 19 24 29 31 34 42 44 48 52 54 59 64 67 71 74
 """
